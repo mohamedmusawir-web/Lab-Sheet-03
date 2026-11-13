@@ -1,5 +1,4 @@
 console.log("Forms lab ready");
-
 const form = document.getElementById("reg-form");
 const nameInput = document.getElementById("full-name");
 const workshopSelect = document.getElementById("workshop");
@@ -9,21 +8,20 @@ const statusMsg = document.getElementById("status");
 const summary = document.getElementById("summary");
 
 form.addEventListener("submit", (e) => {
-  e.preventDefault(); // stay on this page
+  e.preventDefault();
   console.log("Form submitted");
 
-  const name = nameInput.value.trim();                 
+  const name = nameInput.value.trim();
   const workshopText =
-    workshopSelect.options[workshopSelect.selectedIndex].text; 
+    workshopSelect.options[workshopSelect.selectedIndex].text;
   const session =
     document.querySelector('input[name="session"]:checked').value;
   const guests = Number(guestsInput.value);
-  const ownLaptop = laptopBox.checked;                
+  const ownLaptop = laptopBox.checked;
 
-  
   console.log(Object.fromEntries(new FormData(form)));
 
-  summary.textContent = ""; 
+  summary.textContent = "";
 
   const heading = document.createElement("h2");
   heading.textContent = "Registration received";
@@ -39,7 +37,7 @@ form.addEventListener("submit", (e) => {
 
   for (const text of items) {
     const li = document.createElement("li");
-    li.textContent = text; 
+    li.textContent = text;
     list.appendChild(li);
   }
 
@@ -47,5 +45,5 @@ form.addEventListener("submit", (e) => {
   summary.appendChild(list);
 
   statusMsg.textContent = `Thank you, ${name}!`;
-  form.reset(); 
+  form.reset();
 });
