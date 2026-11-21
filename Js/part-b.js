@@ -3,6 +3,7 @@ console.log("Part B: validation ready");
 const form = document.getElementById("reg-form");
 const statusMsg = document.getElementById("status");
 
+// Task B2: validation functions (one per field)
 function validateName(value) {
   if (value.trim() === "") return "Please enter your full name.";
   if (value.trim().length < 3) return "Your name must be at least 3 characters.";
@@ -42,14 +43,17 @@ function validateGuests(value) {
   return "";
 }
 
+// Task B2 + B3.2 (Challenge): show error, and green "valid" class
 function showError(input, message) {
   const errorEl = document.getElementById(`${input.id}-error`);
   errorEl.textContent = message;
   input.classList.toggle("invalid", message !== "");
   input.setAttribute("aria-invalid", message !== "");
+  // Task B3.2 (Challenge): green border when a touched field has no error
   input.classList.toggle("valid", message === "" && Boolean(input.dataset.touched));
 }
 
+// Task B2: connect each input id to its function
 const rules = {
   "full-name": validateName,
   "student-id": validateStudentId,
@@ -65,6 +69,7 @@ function checkField(input) {
   return message === "";
 }
 
+// Task B2: check every field on submit
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   let firstBad = null;
@@ -74,7 +79,7 @@ form.addEventListener("submit", (e) => {
     if (!checkField(input) && firstBad === null) firstBad = input;
   }
   if (firstBad) {
-    firstBad.focus();
+    firstBad.focus(); // take the user to the first problem
     statusMsg.textContent = "Please fix the errors shown in red.";
     return;
   }
@@ -87,14 +92,16 @@ form.addEventListener("submit", (e) => {
   }
 });
 
+// Task B3: live feedback (blur first, then input)
+// Task B4: accessible errors (aria-describedby)
 for (const id in rules) {
   const input = document.getElementById(id);
-  input.setAttribute("aria-describedby", `${id}-error`);
-  input.addEventListener("blur", () => {
+  input.setAttribute("aria-describedby", `${id}-error`); // Task B4
+  input.addEventListener("blur", () => {                 // Task B3
     input.dataset.touched = "yes";
     checkField(input);
   });
-  input.addEventListener("input", () => {
+  input.addEventListener("input", () => {                // Task B3
     if (input.dataset.touched) checkField(input);
   });
 }

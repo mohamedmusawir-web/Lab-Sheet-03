@@ -1,4 +1,5 @@
 console.log("Forms lab ready");
+
 const form = document.getElementById("reg-form");
 const nameInput = document.getElementById("full-name");
 const workshopSelect = document.getElementById("workshop");
@@ -7,10 +8,12 @@ const laptopBox = document.getElementById("laptop");
 const statusMsg = document.getElementById("status");
 const summary = document.getElementById("summary");
 
+// Task A1: submit event
 form.addEventListener("submit", (e) => {
-  e.preventDefault();
+  e.preventDefault(); // stay on this page
   console.log("Form submitted");
 
+  // Task A2: reading values
   const name = nameInput.value.trim();
   const workshopText =
     workshopSelect.options[workshopSelect.selectedIndex].text;
@@ -21,6 +24,7 @@ form.addEventListener("submit", (e) => {
 
   console.log(Object.fromEntries(new FormData(form)));
 
+  // Task A3: registration summary
   summary.textContent = "";
 
   const heading = document.createElement("h2");
