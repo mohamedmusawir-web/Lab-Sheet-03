@@ -22,7 +22,7 @@
     #pw-rules li.met::before { content: "✓ "; }
     #strength { font-weight: bold; margin: 0 0 0.5rem; }
   </style>
-  <script src="js/part-c.js" defer></script>
+  <script src="js/signup.js" defer></script>
 </head>
 <body>
   <h1>Create an account</h1>
@@ -36,6 +36,11 @@
       <label for="email">Email</label>
       <input id="email" type="email" autocomplete="email">
       <span class="error-msg" id="email-error"></span>
+    </div>
+    <div class="field">
+      <label for="dob">Date of birth (optional; must be 16 or over)</label>
+      <input id="dob" type="date" autocomplete="bday">
+      <span class="error-msg" id="dob-error"></span>
     </div>
     <div class="field">
       <label for="password">Password</label>
@@ -62,6 +67,7 @@
     </div>
     <button id="submit-btn" type="submit" disabled>Create account</button>
   </form>
+  <p><button id="reset-btn" type="button">Start again</button></p>
   <p id="result" role="status"></p>
 </body>
 </html>

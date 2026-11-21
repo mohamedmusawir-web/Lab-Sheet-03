@@ -3,6 +3,8 @@ const takenUsernames = ["admin", "nimali", "kavin"];
 const form = document.getElementById("signup-form");
 const username = document.getElementById("username");
 const email = document.getElementById("email");
+const dob = document.getElementById("dob");
+const resetBtn = document.getElementById("reset-btn");
 const password = document.getElementById("password");
 const confirmBox = document.getElementById("confirm");
 const terms = document.getElementById("terms");
@@ -67,19 +69,37 @@ function checkConfirm() {
   return "";
 }
 
+function checkDob(value) {
+  if (value === "") return "";
+  const [y, m, d] = value.split("-").map(Number);
+  const born = new Date(y, m - 1, d);
+  if (Number.isNaN(born.getTime())) return "Enter a valid date of birth.";
+  const today = new Date();
+  if (born > today) return "Date of birth cannot be in the future.";
+  let age = today.getFullYear() - y;
+  const hadBirthday =
+    today.getMonth() > m - 1 ||
+    (today.getMonth() === m - 1 && today.getDate() >= d);
+  if (!hadBirthday) age--;
+  if (age < 16) return "You must be 16 or over to create an account.";
+  return "";
+}
+
 function updateForm() {
   if (username.value !== "") showError(username, checkUsername(username.value));
+  showError(dob, checkDob(dob.value));
   if (email.value !== "") showError(email, checkEmail(email.value));
   if (confirmBox.value !== "") showError(confirmBox, checkConfirm());
 
   const pwOk = checkPasswordRules(password.value);
   const allOk = checkUsername(username.value) === "" &&
                 checkEmail(email.value) === "" &&
+                checkDob(dob.value) === "" &&
                 pwOk && checkConfirm() === "" && terms.checked;
   submitBtn.disabled = !allOk;
 }
 
-[username, email, password, confirmBox, terms].forEach((el) => {
+[username, email, dob, password, confirmBox, terms].forEach((el) => {
   el.addEventListener("input", updateForm);
 });
 
@@ -108,6 +128,42 @@ function showStrength(value, metCount) {
   box.addEventListener("blur", () => {
     capsMsg.textContent = "";
   });
+});
+
+const USERNAME_KEY = "signup-username";
+
+username.addEventListener("input", () => {
+  try {
+    if (checkUsername(username.value) === "") {
+      localStorage.setItem(USERNAME_KEY, username.value.trim());
+    }
+  } catch (err) {
+    
+  }
+});
+
+try {
+  const saved = localStorage.getItem(USERNAME_KEY);
+  if (saved) {
+    username.value = saved;
+    updateForm();
+  }
+} catch (err) {
+  
+}
+
+resetBtn.addEventListener("click", () => {
+  form.reset();
+  form.hidden = false;
+  [username, email, dob, confirmBox].forEach((input) => showError(input, ""));
+  capsMsg.textContent = "";
+  result.textContent = "";
+  password.type = "password";
+  showBtn.textContent = "Show";
+  try { localStorage.removeItem(USERNAME_KEY); } catch (err) {
+    
+  }
+  updateForm();
 });
 
 form.addEventListener("submit", (e) => {
